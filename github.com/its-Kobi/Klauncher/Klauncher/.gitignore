@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# KLauncher personal / machine-specific
+KLauncher/
+.mclo/
+logs/
+cache/
+*.log
+config.json
+profiles.json
+instances/
+java/
+natives/
+libraries/
+assets/
+versions/
+saves/
+server-resource-packs/
+
+# User .minecraft — never commit
+.minecraft/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Installer artifacts
+output/
+*.iss.bak
+*.exe
+*.msi
