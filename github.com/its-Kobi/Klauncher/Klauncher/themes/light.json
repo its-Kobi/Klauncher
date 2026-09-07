@@ -1,0 +1,18 @@
+{
+  "name": "Light (Beta)",
+  "accent": "#2d7dff",
+  "accent_hover": "#1a6cff",
+  "bg_primary": "#eef2f7",
+  "bg_secondary": "#e4e9f2",
+  "bg_panel": "#f8fafc",
+  "bg_card": "#ffffff",
+  "bg_card_hover": "#f1f5f9",
+  "text_primary": "#0f172a",
+  "text_secondary": "#334155",
+  "text_muted": "#64748b",
+  "border": "#cbd5e1",
+  "gradient_from": "#f8fafc",
+  "gradient_to": "#eef2f7",
+  "use_gradient": false,
+  "animations": false
+}
