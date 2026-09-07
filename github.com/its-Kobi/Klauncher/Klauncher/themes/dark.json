@@ -1,0 +1,18 @@
+{
+  "name": "Dark",
+  "accent": "#2d7dff",
+  "accent_hover": "#3a85ff",
+  "bg_primary": "#0a0c10",
+  "bg_secondary": "#14171e",
+  "bg_panel": "#1a1f2b",
+  "bg_card": "#1e2433",
+  "bg_card_hover": "#252e42",
+  "text_primary": "#eef2fb",
+  "text_secondary": "#8a92a8",
+  "text_muted": "#5c657a",
+  "border": "#222a3a",
+  "gradient_from": "#0f1420",
+  "gradient_to": "#0a0c10",
+  "use_gradient": true,
+  "animations": true
+}
