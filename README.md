@@ -3,7 +3,7 @@
 > A clean, fast and original Minecraft launcher for Windows — Vanilla, Fabric, Forge, Quilt, OptiFine & Custom clients. Inspired by PrismLauncher's power and NoRiskClient's minimal dark aesthetic, built from scratch in Python + PySide6.
 
 
- · **By KOBI · 2026** · **License:** Mit License - Open Source · **Platform:** Windows 10/11 (x64)
+ · **By KOBI · 2026** · **License:** Mit License - Open Source · **Platform:** Windows 10/11/7 (x64)
 
 ---
 
@@ -41,7 +41,7 @@
 
 ### 📦 Installation (User)
 
-1. Download `KLauncher-Setup.exe` (InstallForge)
+1. Download `KLauncher1.0_Setup.exe` 
 2. Install → launch → create Offline or Sign in with Microsoft → Create Instance → Launch
 
 No `Java` pre-install needed — KLauncher will fetch it.
@@ -56,7 +56,7 @@ No `Java` pre-install needed — KLauncher will fetch it.
 ### 🛠️ Building from Source (Windows)
 
 ```powershell
-git clone https://github.com/yourname/KLauncher
+git clone https://github.com/its-Kobi/Klauncher
 cd KLauncher
 python -m venv venv; venv\Scripts\activate
 pip install -r requirements.txt  # PySide6, requests
@@ -71,7 +71,7 @@ pyinstaller KLauncher.spec  # → dist/KLauncher/KLauncher.exe
 
 ### ⚙️ Requirements
 
-* Windows 10/11/7 x64, 2GB RAM default (configurable), internet for first version/mod download.
+* Windows 10/11/7 x64, 2GB RAM default (configurable), internet for first version/Modpack download.
 
 ### 💙 Supporting The Developer
 
