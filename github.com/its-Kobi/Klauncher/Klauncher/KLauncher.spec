@@ -2,11 +2,16 @@
 # PyInstaller OneDir spec — clean Windows build, no hardcoded paths
 # Build: pyinstaller KLauncher.spec
 # Output: dist/KLauncher/KLauncher.exe
-import sys
+import os
 from pathlib import Path
 
 block_cipher = None
-base = Path(__file__).parent
+
+# PyInstaller 6.x no longer defines __file__ while executing the spec file.
+try:
+    base = Path(__file__).resolve().parent
+except NameError:
+    base = Path(globals().get("SPECPATH") or os.getcwd()).resolve()
 
 a = Analysis(
     ['main.py'],
