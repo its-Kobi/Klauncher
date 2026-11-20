@@ -9,10 +9,15 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-windows:
     name: Build Windows OneDir
     runs-on: windows-latest
+    timeout-minutes: 25
 
     defaults:
       run:
@@ -38,7 +43,7 @@ jobs:
         run: python -m compileall -q .
 
       - name: Build with PyInstaller
-        run: pyinstaller --noconfirm KLauncher.spec
+        run: python -m PyInstaller --noconfirm KLauncher.spec
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
