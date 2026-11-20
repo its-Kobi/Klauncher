@@ -27,8 +27,9 @@ class JavaManager(QObject):
         extra = []
         java_dir = paths.get_data_dir() / "java"
         if java_dir.exists():
-            for exe in java_dir.rglob("java.exe"):
-                extra.append(str(exe))
+            for name in ("java.exe", "java"):
+                for exe in java_dir.rglob(name):
+                    extra.append(str(exe))
         installs = disc(extra_paths=extra if extra else None, use_cache=False)
         self._installs = installs
         self.detection_finished.emit(installs)
@@ -66,16 +67,37 @@ class JavaManager(QObject):
         self.javas_changed.emit(self._installs)
         return inst
 
-    def find_compatible(self, required: int) -> Optional[JavaInstallation]:
-        for j in self.list():
-            if java_compatible(j.major, required):
-                # prefer exact match first
-                if j.major == required:
-                    return j
-        for j in self.list():
-            if java_compatible(j.major, required):
-                return j
+    def select_for(self, required: int) -> Optional[JavaInstallation]:
+        """Best installed runtime for ``required``: exact major first, then compatible."""
+        installs = self.list()
+        exact = [j for j in installs if j.major == required]
+        if exact:
+            return exact[0]
+        compatible = [j for j in installs if java_compatible(j.major, required)]
+        if compatible:
+            return min(compatible, key=lambda j: (j.major or 99, j.path))
         return None
+
+    def find_compatible(self, required: int) -> Optional[JavaInstallation]:
+        return self.select_for(required)
+
+    def pick_for_launch(self, required: int, preferred: Optional[str]) -> Optional[str]:
+        """Return a Java path that can run ``required``.
+
+        The instance/global preference is used when it is compatible; otherwise
+        fall back to another installed runtime before declaring Java missing.
+        """
+        from launcher.java_detector import _normalize_java_exe
+
+        normalized = _normalize_java_exe(preferred) if preferred else None
+        if normalized:
+            major = parse_java_major(get_java_version(normalized))
+            if java_compatible(major, required):
+                return normalized
+        best = self.select_for(required)
+        if best:
+            return best.path
+        return normalized
 
     def download_java(self, required: int):
         if self._dl_worker and self._dl_worker.isRunning():

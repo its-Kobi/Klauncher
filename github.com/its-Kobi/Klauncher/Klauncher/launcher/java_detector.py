@@ -293,6 +293,14 @@ def _java_candidate_paths(extra_paths: Optional[Sequence[str]]) -> List[str]:
         r"SOFTWARE\Microsoft\JDK",
         r"SOFTWARE\Azul Systems\Zulu",
         r"SOFTWARE\BellSoft\Liberica",
+        r"SOFTWARE\WOW6432Node\JavaSoft\Java Runtime Environment",
+        r"SOFTWARE\WOW6432Node\JavaSoft\JDK",
+        r"SOFTWARE\WOW6432Node\JavaSoft\Java Development Kit",
+        r"SOFTWARE\WOW6432Node\Eclipse Adoptium\JDK",
+        r"SOFTWARE\WOW6432Node\Eclipse Foundation\JDK",
+        r"SOFTWARE\WOW6432Node\Microsoft\JDK",
+        r"SOFTWARE\WOW6432Node\Azul Systems\Zulu",
+        r"SOFTWARE\WOW6432Node\BellSoft\Liberica",
     ):
         for home in _registry_java_homes(key_path):
             add(str(Path(home) / "bin" / "java.exe"))
@@ -329,6 +337,7 @@ def _java_candidate_paths(extra_paths: Optional[Sequence[str]]) -> List[str]:
         paths.get_minecraft_dir() / "runtime",
         Path(os.environ.get("LOCALAPPDATA", "")) / "Packages" / "Microsoft.4297127D64EC6_8wekyb3d8bbwe" / "LocalCache" / "Local" / "runtime",
         paths.get_data_dir() / "runtime",
+        paths.get_data_dir() / "java",
     ):
         if runtime_root.is_dir():
             for exe in _java_exes_under(runtime_root, max_depth=6):

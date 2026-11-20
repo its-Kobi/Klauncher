@@ -3,11 +3,13 @@ from typing import Optional
 from launcher.version_metadata import java_major_for_minecraft, _parse_minecraft_version, recommended_java_major
 
 def required_java_for_version(version_id: str, metadata: Optional[dict] = None) -> int:
-    if metadata and metadata.get("javaVersion", {}).get("majorVersion"):
-        try:
-            return int(metadata["javaVersion"]["majorVersion"])
-        except:
-            pass
+    java_version = (metadata or {}).get("javaVersion") or {}
+    try:
+        major = int(java_version.get("majorVersion"))
+        if major > 0:
+            return major
+    except (TypeError, ValueError):
+        pass
     if metadata:
         rec = recommended_java_major(metadata)
         if rec:
@@ -21,7 +23,7 @@ def required_java_for_instance(instance) -> int:
     # instance has version_id + metadata
     try:
         return required_java_for_version(instance.version_id, getattr(instance, 'metadata', None))
-    except:
+    except Exception:
         return 17
 
 def java_compatible(actual_major: Optional[int], required: int) -> bool:

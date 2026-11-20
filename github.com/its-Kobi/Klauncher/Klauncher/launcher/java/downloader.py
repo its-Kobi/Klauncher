@@ -1,5 +1,5 @@
 from __future__ import annotations
-import json, urllib.request, urllib.error, zipfile, shutil, os
+import json, platform, urllib.request, urllib.error, zipfile, shutil, os
 from pathlib import Path
 from PySide6.QtCore import QThread, Signal
 from launcher import paths
@@ -27,7 +27,13 @@ class JavaDownloadWorker(QThread):
         try:
             major = MAJOR_MAP.get(self.required_major, self.required_major)
             os_name = "windows"
-            arch = "x64"
+            machine = platform.machine().lower()
+            if machine in ("x86", "i386", "i486", "i586", "i686"):
+                arch = "x86"
+            elif machine in ("arm64", "aarch64"):
+                arch = "aarch64"
+            else:
+                arch = "x64"
             url = f"{ADOPTIUM_API.format(major=major)}?architecture={arch}&image_type=jre&os={os_name}&page_size=1&sort_order=DESC&vendor=eclipse"
             self.status.emit(f"Querying Adoptium for Java {major} ...")
             req = urllib.request.Request(url, headers={"User-Agent": "KLauncher/1.0"})
@@ -45,9 +51,15 @@ class JavaDownloadWorker(QThread):
             dest_dir = paths.get_data_dir() / "java" / f"temurin-{major}"
             dest_dir.mkdir(parents=True, exist_ok=True)
             archive = dest_dir / f"openjdk-{major}.zip"
+            archive.unlink(missing_ok=True)
             self.status.emit(f"Downloading Java {major} ...")
-            self._download(dl_url, archive)
+            try:
+                self._download(dl_url, archive)
+            except Exception:
+                archive.unlink(missing_ok=True)
+                raise
             if self._cancel:
+                archive.unlink(missing_ok=True)
                 self.failed.emit("Cancelled")
                 return
             self.status.emit("Extracting ...")
@@ -60,7 +72,7 @@ class JavaDownloadWorker(QThread):
                 exe = p
                 break
             if not exe:
-                self.failed.emit("Java executable not found after extract")
+                self.failed.emit(f"Java executable not found after extracting into {dest_dir}")
                 return
             self.progress.emit(100)
             self.succeeded.emit(str(exe.resolve()))

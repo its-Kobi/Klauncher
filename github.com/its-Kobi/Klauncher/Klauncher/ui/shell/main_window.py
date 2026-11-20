@@ -620,7 +620,7 @@ class MainWindow(QMainWindow):
 
     def _launch_inst(self, inst, _auto_retry=False):
         required=inst.required_java()
-        chosen=self.app.config.get("java_path") or inst.settings_overrides.get("java_path")
+        chosen=self.app.java_manager.pick_for_launch(required, inst.settings_overrides.get("java_path") or self.app.config.get("java_path") or None)
         if not chosen:
             compat=self.app.java_manager.find_compatible(required)
             if compat: chosen=compat.path
@@ -628,6 +628,9 @@ class MainWindow(QMainWindow):
         if not ok:
             # Auto-download required Java (e.g. 1.8.9 → Java 8) if missing, then auto-relaunch
             # Example: 1.8.9 needs Java 8, 1.16 → 8, 1.17 → 16, 1.18-1.20.4 → 17, 1.20.5+ → 21, 1.21+ → 21/25
+            if _auto_retry:
+                QMessageBox.warning(self, "Java not found", msg or f"Java {required} is required for {inst.version_id}.\n\nInstall Java {required} and/or set it in Settings → Java.")
+                return
             self.statusBar().showMessage(f"Java {required} required for {inst.version_id} — downloading...", 3000)
             self._auto_download_and_launch(inst, required)
             return
